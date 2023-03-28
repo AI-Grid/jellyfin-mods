@@ -6,6 +6,34 @@ This is just a guide for various modifications and dumping ground for jellyfin m
 
 #### Please note this is if you do not want or are unable to compile the web client yourself.. there are better ways of doing these mods but if you insist here is the way to run at it. (not preaching its your server after all :D )
 
+## Table of Contents
+
+- [jellyfin-mods](#jellyfin-mods)
+  * [Auto-hide the music player bar at the bottom when mouse is idle](#auto-hide-the-music-player-bar-at-the-bottom-when-mouse-is-idle)
+  * [Add links to other shows inside of the metadata](#add-links-to-other-shows-inside-of-the-metadata)
+  * [Add picture links to metadata of a show / movie](#add-picture-links-to-metadata-of-a-show--movie)
+  * [Force Theme Music for all users (10.8.x)](#force-theme-music-for-all-users-108x)
+  * [Force backdrops for all users (10.8.x)](#force-backdrops-for-all-users-108x)
+  * [Change splash logo](#change-splash-logo)
+  * [Change font to whatever you want](#change-font-to-whatever-you-want)
+  * [Login Background that changes every 10 seconds and reload](#login-background-that-changes-every-10-seconds-and-reload)
+  * [Adding logo to sidebar](#adding-logo-to-sidebar)
+  * [Adding your logo at the top of the login page](#adding-your-logo-at-the-top-of-the-login-page)
+  * [add a link to get more avatars on the profile page](#add-a-link-to-get-more-avatars-on-the-profile-page)
+  * [Trailers tab to Requests tab](#trailers-tab-to-requests-tab)
+  * [Add custom link to side bar](#add-custom-link-to-side-bar)
+  * [Seasonal Animations](#seasonal-animations)
+  * [Hide Scrollbar in older microsoft edge (xbox clients)](#hide-scrollbar-in-older-microsoft-edge-xbox-clients)
+  * [Pan and tilt the backdrops with fades in and out](#pan-and-tilt-the-backdrops-with-fades-in-and-out)
+  * [Default every users page size](#default-every-users-page-size)
+  * [Change the Title of Jellyfin in the browser tab](#change-the-title-of-jellyfin-in-the-browser-tab)
+- [Adding a footer to jellyfin](#adding-a-footer-to-jellyfin)
+- [changing live tv movies from portrait cards to landscape](#changing-live-tv-movies-from-portrait-cards-to-landscape)
+  * [NGINX Serviceworker.js fix](#fix-the-serviceworkerjs-so-it-does-not-throw-errors-and-plays-nice-in-nginx)
+    + [CSS Modifications](#css-modifications)
+  * [my custom css](#my-custom-css-jellyflix-with-a-set-of-my-own-modifications-tweaks-added)
+- [Some Extra tools to be used with Jellyfin](#some-extra-tools-to-be-used-with-jellyfin)
+
 ---
 
 ## Auto-hide the music player bar at the bottom when mouse is idle
@@ -126,15 +154,15 @@ on a side note this is very very similar to what i attempted to do with extrafan
 
 ---
 
-## Force Theme Music for all users (10.7.x)
+## Force Theme Music for all users (10.8.x)
 
-Modify this string in your main.Xxxxxxxxxx.bundle.js to default it to tick (forcing most users default.. unless disabled by them)
+Modify this string in your main.jellyfin.bundle.js to default it to tick (forcing most users default.. unless disabled by them)
 
     enableThemeSongs:function(){return w}
 
 Change it to
 
-    enableThemeSongs:function(){return x}
+    enableThemeSongs:function(){return _}
 
 Save and clear cache reload on clients
 
@@ -144,15 +172,15 @@ Pro tip: use the theme songs plugin to grab many theme songs for tv shows in one
 
 ---
 
-## Force backdrops for all users (10.7.x)
+## Force backdrops for all users (10.8.x)
 
-Modify this string in your main.Xxxxxxxxxx.bundle.js to default it to tick (forcing most users default.. unless disabled by them)
+Modify this string in your main.jellyfin.bundle.js to default it to tick (forcing most users default.. unless disabled by them)
 
-    enableBackdrops:function(){return _}
+    enableBackdrops:function(){return P}
 
 Change it to
 
-    enableBackdrops:function(){return x}
+    enableBackdrops:function(){return _}
 
 Save and clear cache reload on clients
 
@@ -233,7 +261,7 @@ this one was just a quick javascript and some files for backgrounds that will le
 
 ![logosidebar](https://camo.githubusercontent.com/ffd52556715cd72021af339118fe1bb3466b7686c3d75bd473c694d0ff1228a3/68747470733a2f2f692e696d6775722e636f6d2f74386d316f79362e706e67)
 
-This one is failry simmilar to adding a custom side bar link so edit main.xxxxxxxxxx.bundle.js
+This one is failry simmilar to adding a custom side bar link so edit main.jellyfin.bundle.js
 
 find this string:
 
@@ -241,7 +269,7 @@ find this string:
 
 replace it with the following (replace the img src for a different url or image if you wish by default it will grab the logowhite.png from the web root which will need to be added by the user, any full form url will also work instead of "/web/logowhite.png"):
 
-    <div style="height:.5em;"></div>',n+='<img src="/web/logowhite.png" width=250px style="padding: 5px;display:block; margin-left: auto; margin-right: auto;">',
+    <div style="height:.5em;"></div>',t+='<img src="/web/logowhite.png" width=250px style="padding: 5px;display:block; margin-left: auto; margin-right: auto;">',
 
 
 
@@ -332,23 +360,22 @@ replace it with this (replace the obvious part inside the string too)
 
 ## Add custom link to side bar
 
-![](https://camo.githubusercontent.com/ffd52556715cd72021af339118fe1bb3466b7686c3d75bd473c694d0ff1228a3/68747470733a2f2f692e696d6775722e636f6d2f74386d316f79362e706e67)
+Find the file config.json in your webroot. In the section "menuLinks" change it to the following and change the properties to suit your needs (icons are from [Material Design Icons](https://jossef.github.io/material-design-icons-iconfont/)).
 
-open your jellyfin web root (/usr/share/jellyfin/web) and modify main.XXXXXXXXXXXXXXXX.bundle.js replace the Xs.. with your own unique id
+	"menuLinks": [
+    {
+        "name": "Custom Link",
+        "url": "https://jellyfin.org"
+    },
+    {
+        "name": "Custom Link w. Custom Icon",
+        "icon": "attach_money",
+        "url": "https://demo.jellyfin.org/stable"
+    }
+	],
 
-find the string:
+If you only want one link, make sure to remove the comma after the closing bracket (}). If you want to add more links, add a comma for every entry except the last one.
 
-    +m.ZP.translate("Home")+"</span></a>",
-
-replace it with:
-
-    +m.ZP.translate("Home")+"</span></a>", n+='<a is="emby-linkbutton" class="navMenuOption lnkMediaFolder" href="http://YOUROMBIHERE.COM"><i class="md-icon navMenuOptionIcon"><img src="https://i.ibb.co/zhc7zKV/ombi10.png"></i><span class="navMenuOptionText">'+m.ZP.translate("Requests")+"</span></a>",
-
-want more links just keep adding these to the end of the string:
-
-     n+='<a is="emby-linkbutton" class="navMenuOption lnkMediaFolder" href="http://YOURLINK.COM"><i class="md-icon navMenuOptionIcon"><img src="https://ICONIMAGE.COM"></i><span class="navMenuOptionText">'+m.ZP.translate("LINKNAME")+"</span></a>",
-     
-     
 ---
 
 ## Seasonal Animations
